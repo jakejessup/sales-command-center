@@ -724,6 +724,46 @@ body { background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDov
 .sparkle.float { animation: sparkle-float 2s ease-out forwards; }
 .sparkle.twinkle { animation: sparkle-twinkle 1.5s ease-in-out forwards; }
 
+/* ===== BLAKE 1:1 STYLES ===== */
+.blake-account-card { background: #1e2130; border: 1px solid #2d3148; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+.blake-account-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; cursor: pointer; user-select: none; }
+.blake-account-header:hover { background: rgba(99,102,241,0.06); }
+.blake-account-name { font-size: 15px; font-weight: 700; color: #e0e7ff; display: flex; align-items: center; gap: 10px; }
+.blake-account-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.04em; }
+.blake-badge-primary { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+.blake-badge-secondary { background: rgba(245,158,11,0.2); color: #fbbf24; }
+.blake-badge-coaching { background: rgba(236,72,153,0.2); color: #f472b6; }
+.blake-account-meta { display: flex; gap: 12px; align-items: center; font-size: 11px; color: #9ca3af; }
+.blake-account-body { padding: 0 18px 16px; }
+.blake-task-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.blake-task-item:last-child { border-bottom: none; }
+.blake-task-check { width: 18px; height: 18px; accent-color: #6366f1; cursor: pointer; margin-top: 2px; flex-shrink: 0; }
+.blake-task-content { flex: 1; }
+.blake-task-text { font-size: 13px; color: #e5e7eb; line-height: 1.5; }
+.blake-task-text.done { text-decoration: line-through; opacity: 0.4; }
+.blake-task-meta { display: flex; gap: 10px; margin-top: 4px; font-size: 10px; color: #6b7280; }
+.blake-task-meta span { display: flex; align-items: center; gap: 4px; }
+.blake-task-source { background: rgba(99,102,241,0.1); color: #818cf8; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+.blake-task-due { color: #f59e0b; font-weight: 600; }
+.blake-task-due.overdue { color: #ef4444; }
+.blake-add-task-row { display: flex; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
+.blake-add-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid #374151; border-radius: 6px; padding: 8px 12px; color: #e5e7eb; font-size: 12px; font-family: inherit; }
+.blake-add-input:focus { outline: none; border-color: #6366f1; }
+.blake-add-input::placeholder { color: #4b5563; }
+.blake-add-btn { background: #6366f1; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.blake-add-btn:hover { background: #4f46e5; }
+.blake-date-input { background: rgba(255,255,255,0.05); border: 1px solid #374151; border-radius: 6px; padding: 6px 8px; color: #e5e7eb; font-size: 11px; font-family: inherit; width: 130px; }
+.blake-date-input:focus { outline: none; border-color: #6366f1; }
+.blake-progress-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+.blake-progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 2px; transition: width 0.3s; }
+.blake-add-account-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+.blake-chevron { transition: transform 0.2s; color: #6b7280; }
+.blake-chevron.open { transform: rotate(180deg); }
+.blake-stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.blake-stat { background: #1e2130; border: 1px solid #2d3148; border-radius: 10px; padding: 14px 16px; text-align: center; }
+.blake-stat-value { font-size: 22px; font-weight: 800; color: #e0e7ff; }
+.blake-stat-label { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
 </style>
 <!-- EMBEDDED-IMAGES -->
 <style>
@@ -762,6 +802,7 @@ body { background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDov
     <button class="tab-btn" onclick="switchTab('dealrooms',this)">Deal Rooms</button>
     <button class="tab-btn" onclick="switchTab('champions',this)">Champion Tracking</button>
     <button class="tab-btn" onclick="switchTab('news',this)">News</button>
+    <button class="tab-btn" onclick="switchTab('blake',this)">Blake 1:1</button>
   </div>
 </div>
 
@@ -1084,6 +1125,10 @@ body { background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDov
       </div>
     </div>
     <div id="news-feed-container"></div>
+  </div>
+
+  <div id="blake-panel" class="panel">
+    <!-- Blake 1:1 Tracker content will be rendered here -->
   </div>
 
 </div>
@@ -2091,6 +2136,7 @@ function switchTab(tab, btn) {
   document.getElementById(tab+'-panel').classList.add('active');
   if (tab === 'news' && typeof renderNews === 'function') try { renderNews(); } catch(e) { console.error("renderNews error:", e); }
   if (tab === 'dealrooms' && typeof renderDealRooms === 'function') try { renderDealRooms(); } catch(e) { console.error("renderDealRooms error:", e); }
+  if (tab === 'blake' && typeof renderBlake === 'function') try { renderBlake(); } catch(e) { console.error("renderBlake error:", e); }
 }
 
 function toggleRow(row, idx) {
@@ -2534,6 +2580,7 @@ try { renderChampions(); } catch(e) { console.error("renderChampions error:", e)
 try { renderProspects(); } catch(e) { console.error("renderProspects error:", e); }
 try { renderOverview(); } catch(e) { console.error("renderOverview error:", e); }
 try { renderTasks(); } catch(e) { console.error("renderTasks error:", e); }
+try { renderBlake(); } catch(e) { console.error("renderBlake error:", e); }
 
 /* ---- TASKS TAB ENGINE ---- */
 function renderTasks() {
@@ -3183,6 +3230,344 @@ function generateDailyTasks() {
   });
 
   return final;
+}
+
+// ===== BLAKE 1:1 TRACKER =====
+var blakeData = [
+  {
+    account: "Jake",
+    badge: "coaching",
+    tasks: [
+      { id:"bj1", text:"Discovery skills: stop talking too much on calls — ask second-layer questions, dig into the 'question behind the question'", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bj2", text:"Expectation setting: always confirm clear next steps at the end of every call", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bj3", text:"Time management: better call prep + consistent next-step scheduling", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bj4", text:"AI usage balance: avoid 'AI slop' — know when to go manual vs. automated", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bj5", text:"Focus 90-95% mental energy on top 4-6 deals — don't spread thin", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bj6", text:"Communication with Blake: call/text for urgent, Slack for normal, email for FYI", discussed:"Mar 23, 2026", due:"", source:"Granola" }
+    ]
+  },
+  {
+    account: "SentinelOne",
+    badge: "primary",
+    tasks: [
+      { id:"bs1", text:"Pricing strategy alignment: Advanced vs Standard ACU pricing, explore 3-year deal structure", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bs2", text:"Wednesday scoping call with Nick: cover pricing, success metrics, 45-day POC plan", discussed:"Mar 23, 2026", due:"Mar 25, 2026", source:"Granola" },
+      { id:"bs3", text:"Thursday meeting with BDR leader: day-in-the-life demo targeting AE role", discussed:"Mar 23, 2026", due:"Mar 26, 2026", source:"Granola" },
+      { id:"bs4", text:"Follow up with Skyler (Canada sales leader) for additional AE interviews", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bs5", text:"Request enablement materials from Ben Cook for model training", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bs6", text:"Blake reaching out to Ben Cook for Hypo program interview outputs", discussed:"Mar 23, 2026", due:"", source:"Granola (Blake owns)" },
+      { id:"bs7", text:"Account segmentation: map Enterprise vs UC, customer vs prospect universe", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bs8", text:"Wednesday Mar 25 follow-up meeting: demo + feedback session", discussed:"Mar 23, 2026", due:"Mar 25, 2026", source:"Granola" }
+    ]
+  },
+  {
+    account: "AppFolio",
+    badge: "primary",
+    tasks: [
+      { id:"ba1", text:"Model training delayed (Ethan out sick) — reschedule, protect April 1st kickoff date", discussed:"Mar 23, 2026", due:"Mar 24, 2026", source:"Granola" },
+      { id:"ba2", text:"Define concrete, quantifiable success metrics (avoid vague expectations)", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"ba3", text:"Internal sync with Joe on evaluation criteria", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"ba4", text:"Blake to do background research on AppFolio", discussed:"Mar 23, 2026", due:"", source:"Granola (Blake owns)" }
+    ]
+  },
+  {
+    account: "Notion",
+    badge: "primary",
+    tasks: [
+      { id:"bn1", text:"Divide and conquer: Jake firms up evaluation criteria with ops, Joe builds relationship with Ryan (new eng after Theo left)", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bn2", text:"Ryan needs full buy-in — help him with roadmap and delivery timeline", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bn3", text:"Send Notion documents to Blake", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bn4", text:"Blake to do background research on Notion", discussed:"Mar 23, 2026", due:"", source:"Granola (Blake owns)" }
+    ]
+  },
+  {
+    account: "Attentive",
+    badge: "secondary",
+    tasks: [
+      { id:"bt1", text:"Alexia taking $140K proposal to Maliki + finance — follow up for initial thoughts", discussed:"Mar 23, 2026", due:"", source:"Actively" },
+      { id:"bt2", text:"Follow-up meeting tentatively Tuesday 9:30 AM", discussed:"Mar 23, 2026", due:"Mar 24, 2026", source:"Actively" }
+    ]
+  },
+  {
+    account: "Proofpoint",
+    badge: "secondary",
+    tasks: [
+      { id:"bp1", text:"Send 1-pager to Chethan + schedule product overview for JVK (new leader)", discussed:"Mar 23, 2026", due:"", source:"Actively" },
+      { id:"bp2", text:"Chethan hiring data scientist — wants them in discussion (3-4 weeks). Reach out Apr 6 to check timing", discussed:"Mar 23, 2026", due:"Apr 6, 2026", source:"Actively" },
+      { id:"bp3", text:"Mark Vovsi interested in 'action aspect layer' use cases — prepare follow-up demo", discussed:"Mar 23, 2026", due:"", source:"Actively" }
+    ]
+  },
+  {
+    account: "Tanium",
+    badge: "secondary",
+    tasks: [
+      { id:"bta1", text:"Connect Dillon with Jono Gallagher (Senior Sales Technology) — schedule 60-min call", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bta2", text:"Enterprise architecture team documentation required before POC", discussed:"Mar 23, 2026", due:"", source:"Granola" },
+      { id:"bta3", text:"Explore security/legal requirements before POC", discussed:"Mar 23, 2026", due:"", source:"Granola" }
+    ]
+  },
+  {
+    account: "GitLab",
+    badge: "secondary",
+    tasks: [
+      { id:"bg1", text:"Wednesday 4pm ET: full hour walkthrough of BDR day-in-the-life workflow", discussed:"Mar 23, 2026", due:"Mar 25, 2026", source:"Granola" },
+      { id:"bg2", text:"Discuss stakeholders needed for potential POC evaluation", discussed:"Mar 23, 2026", due:"", source:"Granola" }
+    ]
+  },
+  {
+    account: "Gusto",
+    badge: "secondary",
+    tasks: [
+      { id:"bgu1", text:"Demo Strategic Plays Override with Matt Gould (Head Insights), propose pilot scope + BU", discussed:"Mar 23, 2026", due:"", source:"Actively" }
+    ]
+  },
+  {
+    account: "Mews",
+    badge: "secondary",
+    tasks: [
+      { id:"bm1", text:"Follow-up demo TBS with Omar (Head RevOps), complete NDA/security, get Meghan (VP Sales) aligned", discussed:"Mar 23, 2026", due:"", source:"Actively" }
+    ]
+  }
+];
+
+// Load/save blake task state from localStorage
+function loadBlakeState() {
+  try {
+    var s = localStorage.getItem('blakeTaskState_v1');
+    return s ? JSON.parse(s) : {};
+  } catch(e) { return {}; }
+}
+function saveBlakeState() {
+  try { localStorage.setItem('blakeTaskState_v1', JSON.stringify(blakeState)); } catch(e) {}
+}
+function loadBlakeCustom() {
+  try {
+    var s = localStorage.getItem('blakeCustomTasks_v1');
+    return s ? JSON.parse(s) : [];
+  } catch(e) { return []; }
+}
+function saveBlakeCustom() {
+  try { localStorage.setItem('blakeCustomTasks_v1', JSON.stringify(blakeCustomTasks)); } catch(e) {}
+}
+function loadBlakeCollapsed() {
+  try {
+    var s = localStorage.getItem('blakeCollapsed_v1');
+    return s ? JSON.parse(s) : {};
+  } catch(e) { return {}; }
+}
+function saveBlakeCollapsed() {
+  try { localStorage.setItem('blakeCollapsed_v1', JSON.stringify(blakeCollapsed)); } catch(e) {}
+}
+
+var blakeState = loadBlakeState();
+var blakeCustomTasks = loadBlakeCustom();
+var blakeCollapsed = loadBlakeCollapsed();
+
+function toggleBlakeTask(taskId) {
+  blakeState[taskId] = !blakeState[taskId];
+  saveBlakeState();
+  renderBlake();
+}
+
+function toggleBlakeAccount(acct) {
+  blakeCollapsed[acct] = !blakeCollapsed[acct];
+  saveBlakeCollapsed();
+  renderBlake();
+}
+
+function addBlakeTask(account) {
+  var input = document.getElementById('blake-add-' + account.replace(/[^a-zA-Z0-9]/g,''));
+  var dateInput = document.getElementById('blake-due-' + account.replace(/[^a-zA-Z0-9]/g,''));
+  if (!input || !input.value.trim()) return;
+  var task = {
+    id: 'bc_' + Date.now(),
+    text: input.value.trim(),
+    discussed: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}),
+    due: dateInput && dateInput.value ? new Date(dateInput.value + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '',
+    source: 'Custom',
+    account: account
+  };
+  blakeCustomTasks.push(task);
+  saveBlakeCustom();
+  input.value = '';
+  if (dateInput) dateInput.value = '';
+  renderBlake();
+}
+
+function addBlakeAccount() {
+  var input = document.getElementById('blake-new-account');
+  if (!input || !input.value.trim()) return;
+  var acctName = input.value.trim();
+  // Check if account already exists
+  var exists = blakeData.some(function(d) { return d.account.toLowerCase() === acctName.toLowerCase(); });
+  if (!exists) {
+    blakeData.push({ account: acctName, badge: 'secondary', tasks: [] });
+  }
+  // Add a blank custom task prompt
+  blakeCustomTasks.push({
+    id: 'bc_' + Date.now(),
+    text: 'New item — click to edit',
+    discussed: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}),
+    due: '',
+    source: 'Custom',
+    account: acctName
+  });
+  saveBlakeCustom();
+  input.value = '';
+  renderBlake();
+}
+
+function deleteBlakeCustomTask(taskId) {
+  blakeCustomTasks = blakeCustomTasks.filter(function(t) { return t.id !== taskId; });
+  saveBlakeCustom();
+  renderBlake();
+}
+
+function editBlakeTaskDue(taskId) {
+  var el = document.getElementById('blake-due-edit-' + taskId);
+  if (!el) return;
+  var newDue = el.value ? new Date(el.value + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '';
+  // Check custom tasks first
+  var ct = blakeCustomTasks.find(function(t) { return t.id === taskId; });
+  if (ct) { ct.due = newDue; saveBlakeCustom(); }
+  // Also check blakeData tasks
+  blakeData.forEach(function(d) {
+    d.tasks.forEach(function(t) {
+      if (t.id === taskId) t.due = newDue;
+    });
+  });
+  renderBlake();
+}
+
+function renderBlake() {
+  var container = document.getElementById('blake-panel');
+  if (!container) return;
+
+  // Merge custom tasks into account groups
+  var merged = {};
+  blakeData.forEach(function(d) {
+    merged[d.account] = { badge: d.badge, tasks: d.tasks.slice() };
+  });
+  blakeCustomTasks.forEach(function(ct) {
+    if (!merged[ct.account]) merged[ct.account] = { badge: 'secondary', tasks: [] };
+    merged[ct.account].tasks.push(ct);
+  });
+
+  // Calculate stats
+  var totalTasks = 0, completedTasks = 0, accountCount = Object.keys(merged).length, dueSoonCount = 0;
+  var today = new Date();
+  Object.keys(merged).forEach(function(acct) {
+    merged[acct].tasks.forEach(function(t) {
+      totalTasks++;
+      if (blakeState[t.id]) completedTasks++;
+      if (t.due && !blakeState[t.id]) {
+        var dueDate = new Date(t.due);
+        var daysUntil = Math.ceil((dueDate - today) / (1000*60*60*24));
+        if (daysUntil <= 3 && daysUntil >= 0) dueSoonCount++;
+      }
+    });
+  });
+
+  var html = '';
+  // Header
+  html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px">';
+  html += '<div>';
+  html += '<h2 style="font-size:20px;font-weight:800;color:#e0e7ff;margin:0 0 4px">Blake 1:1 Tracker</h2>';
+  html += '<div style="font-size:12px;color:#6b7280">Priorities, action items &amp; coaching from manager syncs &mdash; auto-pulled from Granola + Actively</div>';
+  html += '<div style="font-size:11px;color:#4b5563;margin-top:4px">Last synced: Mar 23, 2026</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Stats
+  html += '<div class="blake-stats-row">';
+  html += '<div class="blake-stat"><div class="blake-stat-value">' + totalTasks + '</div><div class="blake-stat-label">Total Items</div></div>';
+  html += '<div class="blake-stat"><div class="blake-stat-value" style="color:#6ee7b7">' + completedTasks + '</div><div class="blake-stat-label">Completed</div></div>';
+  html += '<div class="blake-stat"><div class="blake-stat-value" style="color:#fbbf24">' + dueSoonCount + '</div><div class="blake-stat-label">Due This Week</div></div>';
+  html += '<div class="blake-stat"><div class="blake-stat-value">' + accountCount + '</div><div class="blake-stat-label">Accounts</div></div>';
+  html += '</div>';
+
+  // Add account bar
+  html += '<div class="blake-add-account-bar">';
+  html += '<input type="text" id="blake-new-account" class="blake-add-input" placeholder="Add a new account..." onkeydown="if(event.key===\'Enter\')addBlakeAccount()">';
+  html += '<button class="blake-add-btn" onclick="addBlakeAccount()">+ Add Account</button>';
+  html += '</div>';
+
+  // Account ordering: Jake first, then primary, then secondary
+  var order = ['coaching', 'primary', 'secondary'];
+  var sortedAccounts = Object.keys(merged).sort(function(a,b) {
+    var oa = order.indexOf(merged[a].badge); if (oa < 0) oa = 9;
+    var ob = order.indexOf(merged[b].badge); if (ob < 0) ob = 9;
+    if (oa !== ob) return oa - ob;
+    return a.localeCompare(b);
+  });
+
+  sortedAccounts.forEach(function(acct) {
+    var data = merged[acct];
+    var tasks = data.tasks;
+    var doneCount = tasks.filter(function(t) { return blakeState[t.id]; }).length;
+    var pct = tasks.length > 0 ? Math.round((doneCount / tasks.length) * 100) : 0;
+    var isCollapsed = blakeCollapsed[acct];
+    var safeAcct = acct.replace(/[^a-zA-Z0-9]/g,'');
+    var badgeClass = 'blake-badge-' + data.badge;
+    var badgeLabel = data.badge === 'coaching' ? 'Coaching' : (data.badge === 'primary' ? 'Primary' : 'Secondary');
+
+    html += '<div class="blake-account-card">';
+    html += '<div class="blake-account-header" onclick="toggleBlakeAccount(\'' + acct.replace(/'/g,"\\'") + '\')">';
+    html += '<div class="blake-account-name">';
+    html += '<svg class="blake-chevron' + (isCollapsed ? '' : ' open') + '" width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    html += acct;
+    html += ' <span class="blake-account-badge ' + badgeClass + '">' + badgeLabel + '</span>';
+    html += '</div>';
+    html += '<div class="blake-account-meta">';
+    html += '<span>' + doneCount + '/' + tasks.length + ' done</span>';
+    html += '<div class="blake-progress-bar" style="width:80px"><div class="blake-progress-fill" style="width:' + pct + '%"></div></div>';
+    html += '</div>';
+    html += '</div>';
+
+    if (!isCollapsed) {
+      html += '<div class="blake-account-body">';
+      tasks.forEach(function(t) {
+        var isDone = blakeState[t.id];
+        var isCustom = t.source === 'Custom';
+        var isOverdue = false;
+        if (t.due && !isDone) {
+          var dd = new Date(t.due);
+          isOverdue = dd < today;
+        }
+        html += '<div class="blake-task-item">';
+        html += '<input type="checkbox" class="blake-task-check" ' + (isDone ? 'checked' : '') + ' onchange="toggleBlakeTask(\'' + t.id + '\')">';
+        html += '<div class="blake-task-content">';
+        html += '<div class="blake-task-text' + (isDone ? ' done' : '') + '">' + t.text + '</div>';
+        html += '<div class="blake-task-meta">';
+        html += '<span class="blake-task-source">' + t.source + '</span>';
+        html += '<span>Discussed: ' + t.discussed + '</span>';
+        if (t.due) {
+          html += '<span class="blake-task-due' + (isOverdue ? ' overdue' : '') + '">' + (isOverdue ? 'OVERDUE: ' : 'Due: ') + t.due + '</span>';
+        } else {
+          html += '<span style="display:flex;align-items:center;gap:4px">Due: <input type="date" id="blake-due-edit-' + t.id + '" class="blake-date-input" style="width:120px;padding:2px 6px" onchange="editBlakeTaskDue(\'' + t.id + '\')" onclick="event.stopPropagation()"></span>';
+        }
+        if (isCustom) {
+          html += '<span style="cursor:pointer;color:#ef4444" onclick="deleteBlakeCustomTask(\'' + t.id + '\')" title="Delete">&#x2715;</span>';
+        }
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+      });
+
+      // Add task input row
+      html += '<div class="blake-add-task-row">';
+      html += '<input type="text" id="blake-add-' + safeAcct + '" class="blake-add-input" placeholder="Add a task for ' + acct + '..." onkeydown="if(event.key===\'Enter\')addBlakeTask(\'' + acct.replace(/'/g,"\\'") + '\')">';
+      html += '<input type="date" id="blake-due-' + safeAcct + '" class="blake-date-input" title="Due date (optional)">';
+      html += '<button class="blake-add-btn" onclick="addBlakeTask(\'' + acct.replace(/'/g,"\\'") + '\')">+ Add</button>';
+      html += '</div>';
+
+      html += '</div>'; // end body
+    }
+
+    html += '</div>'; // end card
+  });
+
+  container.innerHTML = html;
 }
 
 function generateSteps(a, fu) {
